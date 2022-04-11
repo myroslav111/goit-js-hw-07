@@ -3,19 +3,8 @@ import { galleryItems } from './gallery-items.js';
 
 console.log(galleryItems);
 
-//+++ Создание и рендер разметки по массиву данных galleryItems и предоставленному шаблону элемента галереи.
-//+++ Реализация делегирования на div.gallery и получение url большого изображения.
-// Подключение скрипта и стилей библиотеки модального окна basicLightbox. Используй CDN сервис jsdelivr и добавь в проект ссылки на минифицированные (.min) файлы библиотеки.
-// Открытие модального окна по клику на элементе галереи. Для этого ознакомься с документацией и примерами.
-// Замена значения атрибута src элемента <img> в модальном окне перед открытием. Используй готовую разметку модального окна с изображением из примеров библиотеки basicLightbox.
 
-// Ссылка на оригинальное изображение должна храниться в data-атрибуте source на элементе <img>, и указываться в href ссылки. Не добавляй другие HTML теги или CSS классы кроме тех, что есть в этом шаблоне.
-
-//+++ Обрати внимание на то, что изображение обернуто в ссылку, а значит при клике по умолчанию пользователь будет перенаправлен на другую страницу. Запрети это поведение по умолчанию.
-
-// Добавь закрытие модального окна по нажатию клавиши Escape. Сделай так, чтобы прослушивание клавиатуры было только пока открыто модальное окно. У библиотеки basicLightbox есть метод для программного закрытия модального окна.
-
-
+// ссылка основной контейнер
 const refsGalleryContainer = document.querySelector('.gallery')
 const gallerySet = createGalleryGreed(galleryItems)
 
@@ -25,6 +14,7 @@ refsGalleryContainer.innerHTML = gallerySet
 // делегировал события с ел. на родителя получение url orig img
 refsGalleryContainer.addEventListener('click', onGalleryClick)
 
+// делегирую ивент на родителя
 function onGalleryClick(event) {
   // if(event.target.closest('.gallery__image') ){
   //   console.log('hhhhh');
@@ -32,20 +22,18 @@ function onGalleryClick(event) {
   if(event.target.nodeName !== 'IMG'){
     return
   }
-  let urlBigImg = event.target.parentNode.href
-   
-  console.log(urlBigImg);
-
 } 
 
-// снял переход по ссылке
+// ссылка на масив ссылок
 const linkArr = refsGalleryContainer.querySelectorAll('a')
 
+// добавил слушателя на все ссылки
 function addEventListenerOnLink(arr) {
   arr.forEach(element => element.addEventListener('click', removeEvDefoltFromLink));
 }
 addEventListenerOnLink(linkArr)
 
+// функция снятия ивента по умолчанию
 function removeEvDefoltFromLink(event) {
     event.preventDefault()
 }
@@ -64,3 +52,43 @@ function createGalleryGreed(items) {
 </div> `).join('')
 }
 
+// создаю бекдроп модалки 
+const lightbox = document.createElement('div')
+lightbox.id = 'lightbox' 
+refsGalleryContainer.after(lightbox)
+
+// ссылка на img
+const images = document.querySelectorAll('img')
+
+// вешаю слушателя на img
+images.forEach(image => {
+  image.addEventListener('click', createImgForLightbox)
+})
+
+function createImgForLightbox(event) {
+  lightbox.classList.add('active')
+  window.addEventListener('keydown', onEscKeyPressToClose)
+  const img = document.createElement('img')
+  img.src = event.target.dataset.source
+
+  while (lightbox.firstChild) {
+    lightbox.removeChild(lightbox.firstChild)
+  }
+   
+  lightbox.appendChild(img)
+}
+
+// 
+lightbox.addEventListener('click', onLightboxClikToCloseLightbox
+)
+
+function onLightboxClikToCloseLightbox(event) {
+  lightbox.classList.remove('active')
+  window.removeEventListener('keydown', onEscKeyPressToClose)
+}
+
+function onEscKeyPressToClose(event) {
+  if(event.code === 'Escape'){
+    onLightboxClikToCloseLightbox()
+  }
+}
