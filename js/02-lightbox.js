@@ -20,12 +20,4 @@ const newArr = arr.map(el => `<a class="gallery__item" href="${el.original}">
 refsGalleryContainer.innerHTML = gallerySet
 
 // инициализация библиотеки 
-let gallery = new SimpleLightbox('.gallery a');
-gallery.on('show.simplelightbox', createOptionTextAndDelay) 
-
-// фун. задержки заголовка
-// иниц.заголовка
-function createOptionTextAndDelay() {
-    gallery.defaultOptions.captionsData = 'alt'
-    gallery.defaultOptions.captionDelay = 250
-}
+let gallery = new SimpleLightbox('.gallery a', {captionsData :'alt', captionDelay: 250});
