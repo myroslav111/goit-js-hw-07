@@ -10,7 +10,7 @@ const gallerySet = createGallery(galleryItems)
 //фун. разметки галереи
 function createGallery(arr) {
 const newArr = arr.map(el => `<a class="gallery__item" href="${el.original}">
-    <img class="gallery__image" src="${el.preview}" alt="${el.description}"  />
+    <img class="gallery__image lazyload blur-up" data-src="${el.preview}" alt="${el.description}"  />
 </a>`).join('')
 
     return newArr
